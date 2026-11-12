@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: fct_orders
+    description: >
+      One row per non-test, non-cancelled order. Net revenue = gross minus
+      discounts and refunds, attributed to order date.
+    columns:
+      - name: order_id
+        tests: [unique, not_null]
+      - name: customer_id
+        tests:
+          - not_null
+          # dim_customers is not included in this example set
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_id
+      - name: net_revenue
+        description: Additive across all dimensions.
+        tests: [not_null]
